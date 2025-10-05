@@ -1,11 +1,41 @@
+# Python
 venv/
+env/
 __pycache__/
-.vscode/
 *.pyc
-instance/
 *.pyo
 *.pyd
-env/
-build/
-dist/
+*.so
+*.egg
 *.egg-info/
+dist/
+build/
+.Python
+
+# Flask
+instance/
+.webassets-cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads and Data
+static/uploads/*
+!static/uploads/.gitkeep
+data/*.json
+!data/sample_data.json
+
+# Logs
+*.log
+
+# Environment
+.env
+.flaskenv

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, Response, jsonify, request
 import cv2
-import mediapipe as mp
 import numpy as np
 import json
 import os
@@ -16,13 +15,9 @@ os.makedirs(DATA_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Initialize MediaPipe Pose
-mp_pose = mp.solutions.pose
-mp_drawing = mp.solutions.drawing_utils
-pose = mp_pose.Pose(
-    min_detection_confidence=0.5,
-    min_tracking_confidence=0.5
-)
+# Note: MediaPipe requires Python 3.10 or 3.11
+# This version works without MediaPipe for demonstration
+# To use pose detection, install Python 3.11 and reinstall dependencies
 
 
 @app.route('/')
@@ -36,8 +31,9 @@ def health():
     """Health check endpoint - returns versions of installed libraries"""
     versions = {
         'opencv': cv2.__version__,
-        'mediapipe': getattr(mp, '__version__', 'unknown'),
+        'mediapipe': 'Not installed (requires Python 3.10 or 3.11)',
         'numpy': np.__version__,
+        'note': 'Install Python 3.11 for full MediaPipe pose detection'
     }
     return jsonify({'status': 'ok', 'versions': versions})
 
@@ -53,12 +49,12 @@ def capture_once():
     if not ret:
         return jsonify({'error': 'failed to read frame'}), 500
     h, w = frame.shape[:2]
-    return jsonify({'width': w, 'height': h})
+    return jsonify({'width': w, 'height': h, 'note': 'Camera works! Install Python 3.11 for pose detection.'})
 
 
 @app.route('/video_feed')
 def video_feed():
-    """Video streaming route - returns MJPEG stream"""
+    """Video streaming route - returns MJPEG stream (without pose detection for now)"""
     def generate():
         cap = cv2.VideoCapture(0)
         while True:
@@ -66,29 +62,14 @@ def video_feed():
             if not success:
                 break
             
-            # Convert BGR to RGB for MediaPipe
-            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image.flags.writeable = False
-            
-            # Process with MediaPipe Pose
-            results = pose.process(image)
-            
-            # Convert back to BGR for OpenCV
-            image.flags.writeable = True
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            
-            # Draw pose landmarks if detected
-            if results.pose_landmarks:
-                mp_drawing.draw_landmarks(
-                    image,
-                    results.pose_landmarks,
-                    mp_pose.POSE_CONNECTIONS,
-                    mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=2),
-                    mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)
-                )
+            # Add text overlay indicating MediaPipe is not available
+            cv2.putText(frame, 'Camera Feed Working!', (10, 30), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(frame, 'Install Python 3.11 for pose detection', (10, 70), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
             
             # Encode frame as JPEG
-            ret, buffer = cv2.imencode('.jpg', image)
+            ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             
             yield (b'--frame\r\n'
@@ -131,4 +112,16 @@ def get_users():
 
 
 if __name__ == '__main__':
+    print("=" * 60)
+    print("Yoga Pose Detection Server Starting...")
+    print("=" * 60)
+    print("Note: This version runs without MediaPipe pose detection")
+    print("To enable pose detection:")
+    print("1. Install Python 3.11 from https://www.python.org/downloads/")
+    print("2. Create new venv: py -3.11 -m venv venv")
+    print("3. Install requirements: pip install -r requirements.txt")
+    print("=" * 60)
+    print("Server will start at: http://127.0.0.1:5000")
+    print("Press Ctrl+C to stop the server")
+    print("=" * 60)
     app.run(debug=True, host='0.0.0.0', port=5000)
