@@ -1,4 +1,99 @@
-# Yoga Partner — Yoga Pose Detection
+# 🧘 Yoga Pose Detection
+
+Real-time yoga pose detection using MediaPipe and OpenCV with Flask web interface.
+
+## 🚀 Quick Start
+
+```powershell
+# 1. Navigate to project
+cd "c:\Users\shrav\OneDrive\Desktop\YOGA POSE DETECTION\Yoga-Partner-Yoga-pose-detection-"
+
+# 2. Activate virtual environment
+.\venv\Scripts\Activate.ps1
+
+# 3. Run the app
+python app.py
+```
+
+Open browser: **http://127.0.0.1:5000**
+
+## 📋 First Time Setup
+
+```powershell
+# Install Python 3.11.9
+# Download: https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe
+
+# Create virtual environment
+py -3.11 -m venv venv
+
+# Activate it
+.\venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run
+python app.py
+```
+
+## 🎮 Features
+
+- **Real-time pose detection** with 33 body landmarks
+- **Skeleton overlay** on webcam feed
+- **User registration** system (saves to `data/` folder)
+- **Pose classification** for yoga poses
+- **REST API** endpoints for integration
+
+## 🎯 Usage
+
+- Press **S** to start camera
+- Press **X** to stop camera
+- Fill form and click "Save User" to register
+- Click "Test Health" to check system status
+
+## 📁 Project Structure
+
+```
+├── app.py                  # Main Flask application
+├── requirements.txt        # Dependencies
+├── models/
+│   └── pose_detector.py   # Pose detection logic
+├── templates/
+│   └── index.html         # Web interface
+├── static/
+│   ├── css/style.css      # Styling
+│   └── js/main.js         # Frontend logic
+└── data/                  # User data storage
+```
+
+## 🛠️ Tech Stack
+
+- **Flask** - Web framework
+- **MediaPipe** - Pose detection (33 landmarks)
+- **OpenCV** - Video capture and processing
+- **NumPy** - Mathematical operations
+
+## ⚠️ Requirements
+
+- Python 3.11 (MediaPipe doesn't support 3.13)
+- Webcam
+- Windows/Linux/Mac
+
+## 📊 API Endpoints
+
+- `GET /` - Main page
+- `GET /health` - System health check
+- `GET /video_feed` - MJPEG video stream
+- `POST /api/save_user` - Save user data
+- `GET /api/get_users` - Retrieve all users
+
+## 🐛 Troubleshooting
+
+**Camera not working?** Close other apps using camera (Zoom, Teams, etc.)
+
+**Module not found?** Activate virtual environment: `.\venv\Scripts\Activate.ps1`
+
+**Port in use?** Stop other Flask apps or change port in `app.py`
 
 This repository will host a web app that performs yoga pose detection using OpenCV and MediaPipe.
 
