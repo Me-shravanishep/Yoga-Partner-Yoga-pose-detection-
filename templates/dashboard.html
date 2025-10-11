@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Yoga Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .dashboard-container { max-width: 900px; margin: 2rem auto; }
+        .card { background: #0f172a; padding: 1.5rem; border-radius: 12px; border: 1px solid #1f2a44; margin-bottom: 1.5rem; }
+        .history-table { width:100%; border-collapse:collapse; margin-top:1rem; }
+        .history-table th, .history-table td { border:1px solid #334155; padding:.5rem 1rem; text-align:center; }
+        .tasks-list { margin:0; padding:0 0 0 1.2rem; }
+        .logout-link { color:#9ecbff; text-decoration:underline; float:right; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Welcome, {{ username }} <a class="logout-link" href="/logout">Logout</a></h2>
+        <div class="card">
+            <h3>Exercise History</h3>
+            {% if history %}
+            <table class="history-table">
+                <tr><th>Date</th><th>Pose</th><th>Accuracy</th></tr>
+                {% for entry in history %}
+                <tr><td>{{ entry.date }}</td><td>{{ entry.pose }}</td><td>{{ entry.accuracy }}</td></tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p>No exercise history yet.</p>
+            {% endif %}
+        </div>
+        <div class="card">
+            <h3>Daily Tasks</h3>
+            <ul class="tasks-list">
+                {% for task in tasks %}
+                <li>{{ task }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Categories</h3>
+            <ul class="tasks-list">
+                <li><a href="/category/yoga">Yoga</a></li>
+                <li><a href="/category/fatburn">Fat-burning Workouts</a></li>
+                <li><a href="/category/kids">Kids Exercises</a></li>
+                <li><a href="/category/elderly">Elderly Exercises</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

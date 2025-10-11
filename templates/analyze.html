@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze Video - Yoga Pose Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .analyze-container { max-width: 900px; margin: 2rem auto; }
+        .row { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .card { background: #0f172a; padding: 1rem; border-radius: 12px; border: 1px solid #1f2a44; }
+        label { display:block; margin:.4rem 0 .2rem; font-weight:600; }
+        input[type="text"], select { width:100%; padding:.6rem .7rem; border-radius:8px; border:1px solid #334155; background:#0b1220; color:#e2e8f0; }
+        .actions { display:flex; gap:.6rem; margin-top:.8rem; }
+        .btn { background:#2563eb; color:#fff; padding:.6rem .9rem; border:none; border-radius:8px; cursor:pointer; }
+        .btn.secondary { background:#0b1220; border:1px solid #334155; }
+        .result { white-space:pre-wrap; background:#0b1220; border:1px solid #334155; padding:1rem; border-radius:8px; }
+        video { width:100%; border-radius:12px; border:1px solid #334155; background:#000; }
+    </style>
+    <script>
+        async function analyzeVideo(e){
+            e.preventDefault();
+            const url = document.getElementById('videoUrl').value.trim();
+            const pose = document.getElementById('targetPose').value;
+            if(!url){ alert('Please paste a video URL'); return; }
+            document.getElementById('result').textContent = 'Analyzing... this may take a bit for longer videos';
+            try{
+                const res = await fetch('/api/analyze_video',{
+                    method:'POST',
+                    headers:{ 'Content-Type':'application/json' },
+                    body: JSON.stringify({ url, target_pose: pose })
+                });
+                const data = await res.json();
+                document.getElementById('result').textContent = JSON.stringify(data,null,2);
+            }catch(err){
+                document.getElementById('result').textContent = 'Error: '+err.message;
+            }
+        }
+        function preview(){
+            const url = document.getElementById('videoUrl').value.trim();
+            const v = document.getElementById('player');
+            if(url) { v.src = url; v.load(); }
+        }
+    </script>
+    </head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🎥 Analyze Video</h1>
+            <p class="subtitle">Paste a Kaggle (or any) video URL and check pose correctness</p>
+            <p><a class="btn secondary" href="/">← Back to Live Detection</a></p>
+        </div>
+    </header>
+    <main class="container analyze-container">
+        <section class="card">
+            <form onsubmit="analyzeVideo(event)">
+                <label for="videoUrl">Video URL</label>
+                <input type="text" id="videoUrl" placeholder="https://.../your-video.mp4" onblur="preview()" />
+
+                <label for="targetPose">Target Pose</label>
+                <select id="targetPose">
+                    <option value="mountain">Mountain</option>
+                    <option value="warrior1">Warrior I</option>
+                    <option value="warrior2">Warrior II</option>
+                    <option value="tree">Tree</option>
+                    <option value="downdog">Downward Dog</option>
+                    <option value="plank">Plank</option>
+                </select>
+
+                <div class="actions">
+                    <button class="btn" type="submit">Analyze</button>
+                    <button class="btn secondary" type="button" onclick="preview()">Preview Video</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="card">
+            <h3>Preview</h3>
+            <video id="player" controls crossorigin="anonymous"></video>
+        </section>
+
+        <section class="card">
+            <h3>Results</h3>
+            <pre id="result" class="result">No analysis yet.</pre>
+        </section>
+    </main>
+    <footer>
+        <div class="container"><p>&copy; 2025 TEAM CODEASTRA</p></div>
+    </footer>
+</body>
+</html>
