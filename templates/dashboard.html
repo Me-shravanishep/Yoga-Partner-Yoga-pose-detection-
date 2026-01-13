@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Yoga Progress</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.10.0/recharts.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+            --accent: #6366f1;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+        }
+        
+        body {
+            background: linear-gradient(to bottom right, var(--bg-primary), #1e1b4b, var(--bg-primary));
+            min-height: 100vh;
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 24px;
+        }
+        .stat-value { font-size: 32px; font-weight: bold; margin-top: 8px; }
+        .stat-label { color: var(--text-secondary); font-size: 14px; font-weight: 500; }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="sticky top-0 z-50 border-b border-slate-700/50 backdrop-blur-sm bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <h1 class="text-2xl font-bold">🧘 Yoga Progress Dashboard</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="p-2 hover:bg-slate-800 rounded-lg transition">
+                    <i class="fas fa-bell text-slate-300"></i>
+                </button>
+                <button class="p-2 hover:bg-slate-800 rounded-lg transition">
+                    <i class="fas fa-cog text-slate-300"></i>
+                </button>
+                <div class="h-8 w-px bg-slate-700"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-xs"></i>
+                    </div>
+                    <span class="text-sm font-medium">{{ username }}</span>
+                </div>
+                <div class="flex gap-2">
+                    <a href="/page2" class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg transition text-sm font-medium">
+                        <i class="fas fa-yoga mr-2"></i>Start Practice
+                    </a>
+                    <a href="/logout" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition text-sm font-medium">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Sessions -->
+            <div class="card stat-card">
+                <div>
+                    <p class="stat-label">Total Sessions</p>
+                    <p class="stat-value">{{ stats.total_sessions }}</p>
+                    <div class="mt-2 flex items-center gap-1 text-xs">
+                        <span class="trend-up">↑</span>
+                        <span class="text-slate-400">12% vs last month</span>
+                    </div>
+                </div>
+                <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--accent);">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+            </div>
+
+            <!-- Today's Practice -->
+            <div class="card stat-card">
+                <div>
+                    <p class="stat-label">Today's Sessions</p>
+                    <p class="stat-value">{{ stats.today_sessions }}</p>
+                    <div class="mt-2 flex items-center gap-1 text-xs">
+                        <span class="trend-up">↑</span>
+                        <span class="text-slate-400">Consistency streak: 7 days</span>
+                    </div>
+                </div>
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">
+                    <i class="fas fa-zap"></i>
+                </div>
+            </div>
+
+            <!-- Average Score -->
+            <div class="card stat-card">
+                <div>
+                    <p class="stat-label">Average Score</p>
+                    <p class="stat-value">{{ stats.avg_score }}%</p>
+                    <div class="mt-2 flex items-center gap-1 text-xs">
+                        <span class="trend-up">↑</span>
+                        <span class="text-slate-400">5% improvement</span>
+                    </div>
+                </div>
+                <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+
+            <!-- Total Minutes -->
+            <div class="card stat-card">
+                <div>
+                    <p class="stat-label">Total Minutes</p>
+                    <p class="stat-value">{{ stats.total_minutes }}</p>
+                    <div class="mt-2 flex items-center gap-1 text-xs">
+                        <span class="trend-up">↑</span>
+                        <span class="text-slate-400">Target: 300 min/week</span>
+                    </div>
+                </div>
+                <div class="stat-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan);">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Weekly Progress Chart -->
+            <div class="card p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Weekly Performance</h2>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded">Last 7 Days</span>
+                </div>
+                <canvas id="weeklyChart"></canvas>
+            </div>
+
+            <!-- Pose Distribution -->
+            <div class="card p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Pose Distribution</h2>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded">This Month</span>
+                </div>
+                <canvas id="poseChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top Poses Section -->
+        <div class="card p-6 mb-8">
+            <h2 class="text-xl font-bold mb-6 flex items-center">
+                <i class="fas fa-star mr-2" style="color: var(--accent-amber);"></i>
+                Top Poses
+            </h2>
+            {% if top_poses and top_poses|length > 0 %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-slate-700">
+                            <th class="text-left py-3 px-4 text-slate-400 font-medium text-sm">Pose</th>
+                            <th class="text-center py-3 px-4 text-slate-400 font-medium text-sm">Sessions</th>
+                            <th class="text-center py-3 px-4 text-slate-400 font-medium text-sm">Avg Score</th>
+                            <th class="text-center py-3 px-4 text-slate-400 font-medium text-sm">Best Score</th>
+                            <th class="text-center py-3 px-4 text-slate-400 font-medium text-sm">Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pose in top_poses %}
+                        <tr class="border-b border-slate-700/50 hover:bg-slate-800/30 transition">
+                            <td class="py-3 px-4 font-medium">{{ pose.name }}</td>
+                            <td class="py-3 px-4 text-center">{{ pose.sessions }}</td>
+                            <td class="py-3 px-4 text-center">
+                                <span class="text-green-400">{{ pose.avg_score }}%</span>
+                            </td>
+                            <td class="py-3 px-4 text-center font-bold">{{ pose.best_score }}%</td>
+                            <td class="py-3 px-4 text-center">
+                                <span class="inline-flex items-center gap-1 {{ 'text-green-400' if pose.progress >= 0 else 'text-red-400' }} text-sm">
+                                    <i class="fas fa-arrow-{{ 'up' if pose.progress >= 0 else 'down' }}"></i>{{ pose.progress }}%
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <p class="text-slate-400">No pose data available yet. Start practicing to see your top poses!</p>
+            </div>
+            {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Sessions -->
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-6 flex items-center">
+                <i class="fas fa-history mr-2" style="color: var(--accent-cyan);"></i>
+                Recent Sessions
+            </h2>
+            <div class="space-y-3">
+                {% if recent_sessions and recent_sessions|length > 0 %}
+                    {% for session in recent_sessions %}
+                    <div class="flex items-center justify-between p-4 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition">
+                        <div class="flex-1">
+                            <p class="font-medium">{{ session.pose }}</p>
+                            <p class="text-xs text-slate-400 mt-1">{{ session.date }}</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-green-400">{{ session.score }}%</p>
+                                <p class="text-xs text-slate-400">{{ session.duration }}</p>
+                            </div>
+                            <button class="p-2 hover:bg-slate-700 rounded-lg transition">
+                                <i class="fas fa-arrow-right text-slate-400"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-12">
+                        <i class="fas fa-yoga text-6xl text-slate-700 mb-4"></i>
+                        <p class="text-slate-400 text-lg mb-2">No practice sessions yet</p>
+                        <p class="text-slate-500 text-sm mb-6">Start your yoga journey today!</p>
+                        <a href="/page2" class="inline-block bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg transition">
+                            <i class="fas fa-play mr-2"></i>Start Practice
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Weekly Chart - Using actual user data
+        const weeklyCtx = document.getElementById('weeklyChart');
+        if (weeklyCtx) {
+            const weeklyLabels = {{ weekly_labels | default([]) | tojson | safe }};
+            const weeklyScores = {{ weekly_scores | default([]) | tojson | safe }};
+            
+            new Chart(weeklyCtx, {
+                type: 'bar',
+                data: {
+                    labels: weeklyLabels.length > 0 ? weeklyLabels : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Score',
+                        data: weeklyScores.length > 0 ? weeklyScores : [0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                        borderRadius: 6,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Score: ' + context.parsed.y.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: 'rgba(71, 85, 105, 0.1)' },
+                            ticks: { 
+                                color: '#cbd5e1',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#cbd5e1' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Pose Distribution Chart - Using actual user data
+        const poseCtx = document.getElementById('poseChart');
+        if (poseCtx) {
+            const poseLabels = {{ pose_labels | default([]) | tojson | safe }};
+            const poseDistribution = {{ pose_distribution | default([]) | tojson | safe }};
+            
+            new Chart(poseCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: poseLabels.length > 0 ? poseLabels : ['No Data'],
+                    datasets: [{
+                        data: poseDistribution.length > 0 ? poseDistribution : [1],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(6, 182, 212, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(100, 116, 139, 0.8)'
+                        ],
+                        borderColor: 'rgba(30, 41, 59, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#cbd5e1', padding: 15 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (poseLabels.length === 0) return 'Start practicing to see data';
+                                    return context.label + ': ' + context.parsed + ' sessions';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

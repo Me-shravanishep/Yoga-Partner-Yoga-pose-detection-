@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenScan | Age-Specific Yoga AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Quicksand', sans-serif; }
+        .pose-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .pose-card:hover { transform: scale(1.02); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .age-tab-active { border-bottom: 4px solid #10b981; color: #10b981; }
+        .care-box { border-left: 4px solid #ef4444; }
+    </style>
+</head>
+<body class="bg-slate-50" x-data="{ ageGroup: 'kids', showDetection: false, selectedPose: '' }">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="bg-emerald-600 p-2 rounded-lg">
+                    <i class="fas fa-microchip text-white"></i>
+                </div>
+                <span class="text-2xl font-bold text-slate-800">ZenScan AI</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <a href="/dashboard" class="text-slate-600 font-semibold hover:text-emerald-600 flex items-center">
+                    <i class="fas fa-chart-line mr-2"></i>Dashboard
+                </a>
+                <a href="/login" class="text-slate-600 font-semibold hover:text-emerald-600">Login</a>
+                <a href="/register" class="px-6 py-2 bg-emerald-600 text-white rounded-full font-bold shadow-lg hover:bg-emerald-700 transition">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-12 text-center bg-white border-b">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Personalized Yoga Journeys</h1>
+        <p class="text-slate-500 max-w-2xl mx-auto px-6">Select your age group to begin AI-powered pose detection tailored to your body's specific needs and capabilities.</p>
+        
+        <!-- Age Selector Tabs -->
+        <div class="flex justify-center mt-12 space-x-4 md:space-x-12 border-b border-gray-100 max-w-3xl mx-auto px-4">
+            <button @click="ageGroup = 'kids'" :class="ageGroup === 'kids' ? 'age-tab-active' : ''" class="pb-4 px-4 font-bold text-lg transition-all">
+                <i class="fas fa-child mr-2"></i> 5 - 14 Years
+            </button>
+            <button @click="ageGroup = 'youth'" :class="ageGroup === 'youth' ? 'age-tab-active' : ''" class="pb-4 px-4 font-bold text-lg transition-all">
+                <i class="fas fa-running mr-2"></i> 15 - 35 Years
+            </button>
+            <button @click="ageGroup = 'adults'" :class="ageGroup === 'adults' ? 'age-tab-active' : ''" class="pb-4 px-4 font-bold text-lg transition-all">
+                <i class="fas fa-user-check mr-2"></i> 36 - 55 Years
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <!-- PHASE 1: KIDS (5-14) -->
+        <div x-show="ageGroup === 'kids'" x-transition:enter="transition ease-out duration-300" class="grid grid-cols-3 gap-6 auto-rows-max">
+            <!-- Pose 1 -->
+            <div class="pose-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 p-6 h-full flex flex-col">
+                <img src="/static/uploads/tree-pose.webp" class="w-full h-64 object-contain rounded-2xl mb-4">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Tree Pose (Vrikshasana)</h3>
+                <div class="mb-3 flex-grow">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">BENEFITS</span>
+                    <p class="text-xs text-slate-600 mt-1">Improves concentration and balance. Strengthens leg muscles.</p>
+                </div>
+                <div class="care-box bg-red-50 p-3 mb-4">
+                    <span class="text-xs font-bold text-red-600">CARE & PRECAUTION</span>
+                    <p class="text-xs text-red-800">Avoid if you have a headache. Don't press foot directly against the knee joint.</p>
+                </div>
+                <button @click="showDetection = true; selectedPose = 'Tree Pose (Vrikshasana)'; window.startPoseDetection('Tree Pose (Vrikshasana)')" class="w-full py-2 bg-slate-900 text-white rounded-xl font-bold hover:bg-emerald-600 transition flex items-center justify-center text-sm">
+                    <i class="fas fa-camera mr-2"></i> Start Detection
+                </button>
+            </div>
+
+            <!-- Pose 2: Butterfly Pose -->
+            <div class="pose-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 p-6 h-full flex flex-col">
+                <img src="/static/uploads/butterfly-pose.webp" class="w-full h-64 object-contain rounded-2xl mb-4">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Butterfly Pose (Baddha Konasana)</h3>
+                <div class="mb-3 flex-grow">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">BENEFITS</span>
+                    <p class="text-xs text-slate-600 mt-1">Opens the hips and stretches inner thighs. Calms the mind and reduces anxiety.</p>
+                </div>
+                <div class="care-box bg-red-50 p-3 mb-4">
+                    <span class="text-xs font-bold text-red-600">CARE & PRECAUTION</span>
+                    <p class="text-xs text-red-800">Don't force the knees down to the floor. Let gravity do the work.</p>
+                </div>
+                <button @click="showDetection = true; selectedPose = 'Butterfly Pose (Baddha Konasana)'; window.startPoseDetection('Butterfly Pose (Baddha Konasana)')" class="w-full py-2 bg-slate-900 text-white rounded-xl font-bold hover:bg-emerald-600 transition flex items-center justify-center text-sm">
+                    <i class="fas fa-camera mr-2"></i> Start Detection
+                </button>
+            </div>
+
+            <!-- Pose 3: Cobra Pose -->
+            <div class="pose-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 p-6 h-full flex flex-col">
+                <img src="/static/uploads/cobra-pose.jpg" class="w-full h-64 object-contain rounded-2xl mb-4">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Cobra Pose (Bhujangasana)</h3>
+                <div class="mb-3 flex-grow">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">BENEFITS</span>
+                    <p class="text-xs text-slate-600 mt-1">Strengthens the spine and opens the chest. Relieves stress and fatigue.</p>
+                </div>
+                <div class="care-box bg-red-50 p-3 mb-4">
+                    <span class="text-xs font-bold text-red-600">CARE & PRECAUTION</span>
+                    <p class="text-xs text-red-800">Don't crunch the lower back. Only lift as high as comfortable without straining.</p>
+                </div>
+                <button @click="showDetection = true; selectedPose = 'Cobra Pose (Bhujangasana)'; window.startPoseDetection('Cobra Pose (Bhujangasana)')" class="w-full py-2 bg-slate-900 text-white rounded-xl font-bold hover:bg-emerald-600 transition flex items-center justify-center text-sm">
+                    <i class="fas fa-camera mr-2"></i> Start Detection
+                </button>
+            </div>
+
+            <!-- Pose 4: Downward-Facing Dog -->
+            <div class="pose-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 p-6">
+                <img src="/static/uploads/downward-dog.jpg" class="w-full h-[500px] object-contain rounded-2xl mb-4">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Adho Mukha Svanasana</h3>
+                <div class="mb-4">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">BENEFITS</span>
+                    <p class="text-xs text-slate-600 mt-1">Strengthens upper body and arms. Increases blood flow to the brain for better focus.</p>
+                </div>
+                <div class="care-box bg-red-50 p-3 mb-6">
+                    <span class="text-xs font-bold text-red-600">CARE & PRECAUTION</span>
+                    <p class="text-xs text-red-800">Spread fingers wide to distribute weight and protect wrists.</p>
+                </div>
+                <button @click="showDetection = true; selectedPose = 'Downward-Facing Dog (Adho Mukha Svanasana)'; window.startPoseDetection('Downward-Facing Dog (Adho Mukha Svanasana)')" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-emerald-600 transition flex items-center justify-center">
+                    <i class="fas fa-camera mr-2"></i> Start Detection
+                </button>
+            </div>
+
+            <!-- Pose 5: Child's Pose -->
+            <div class="pose-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 p-6">
+                <img src="/static/uploads/child-pose.jpg" class="w-full h-[500px] object-contain rounded-2xl mb-4">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Child's Pose (Balasana)</h3>
+                <div class="mb-4">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">BENEFITS</span>
+                    <p class="text-xs text-slate-600 mt-1">Gently stretches the lower back and hips. Calms the nervous system and regulates emotions.</p>
+                </div>
+                <div class="care-box bg-red-50 p-3 mb-6">
+                    <span class="text-xs font-bold text-red-600">CARE & PRECAUTION</span>
+                    <p class="text-xs text-red-800">Ensure chest isn't compressed so it's easy to breathe deeply.</p>
+                </div>
+                <button @click="showDetection = true; selectedPose = 'Child\'s Pose (Balasana)'; window.startPoseDetection(`Child's Pose (Balasana)`)" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-emerald-600 transition flex items-center justify-center">
+                    <i class="fas fa-camera mr-2"></i> Start Detection
+                </button>
+            </div>
+
+            <!-- Pose 6: Cat-Cow Pose -->
+            <div class="pose-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 p-6">
+                <img src="/static/uploads/cat-cow-pose.webp" class="w-full h-[500px] object-contain rounded-2xl mb-4">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Cat-Cow Pose (Marjaryasana-Bitilasana)</h3>
+                <div class="mb-4">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">BENEFITS</span>
+                    <p class="text-xs text-slate-600 mt-1">Gently warms up the spine and increases flexibility. Helps learn to engage abdominal muscles.</p>
+                </div>
+                <div class="care-box bg-red-50 p-3 mb-6">
+                    <span class="text-xs font-bold text-red-600">CARE & PRECAUTION</span>
+                    <p class="text-xs text-red-800">When looking up, don't crunch the back of the neck. Keep the gaze slightly forward.</p>
+                </div>
+                <button @click="showDetection = true; selectedPose = 'Cat-Cow Pose (Marjaryasana-Bitilasana)'; window.startPoseDetection('Cat-Cow Pose (Marjaryasana-Bitilasana)')" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-emerald-600 transition flex items-center justify-center">
+                    <i class="fas fa-camera mr-2"></i> Start Detection
+                </button>
+            </div>
+
+            <!-- Placeholder for remaining poses -->
+            <div class="flex items-center justify-center p-12 border-2 border-dashed border-slate-200 rounded-3xl text-slate-400">
+                <p>+ 6 More Fun Poses for Kids...</p>
+            </div>
+        </div>
+
+        <!-- PHASE 2: YOUTH (15-35) -->
+        <div x-show="ageGroup === 'youth'" x-transition:enter="transition ease-out duration-300" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Pose 1 -->
+            <div class="pose-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 p-6">
+                <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=400" class="w-full h-48 object-cover rounded-2xl mb-4">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Warrior II (Virabhadrasana II)</h3>
+                <div class="mb-4">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">BENEFITS</span>
+                    <p class="text-sm text-slate-600 mt-1">Builds stamina, tones core, and opens chest for better breathing.</p>
+                </div>
+                <div class="care-box bg-red-50 p-3 mb-6">
+                    <span class="text-xs font-bold text-red-600">CARE & PRECAUTION</span>
+                    <p class="text-xs text-red-800">Ensure the front knee doesn't go past the ankle. Keep shoulders relaxed.</p>
+                </div>
+                <button @click="showDetection = true; selectedPose = 'Warrior II (Virabhadrasana II)'; window.startPoseDetection('Warrior II (Virabhadrasana II)')" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-emerald-600 transition flex items-center justify-center">
+                    <i class="fas fa-camera mr-2"></i> Start Detection
+                </button>
+            </div>
+             <!-- (Repeat for 11 more: Crow, Sun Salutation, Plank, Wheel, etc.) -->
+             <div class="flex items-center justify-center p-12 border-2 border-dashed border-slate-200 rounded-3xl text-slate-400">
+                <p>+ 11 More Dynamic Poses for Youth...</p>
+            </div>
+        </div>
+
+        <!-- PHASE 3: ADULTS (36-55) -->
+        <div x-show="ageGroup === 'adults'" x-transition:enter="transition ease-out duration-300" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Pose 1 -->
+            <div class="pose-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 p-6">
+                <img src="https://images.unsplash.com/photo-1573590330099-d6c7355ec595?auto=format&fit=crop&q=80&w=400" class="w-full h-48 object-cover rounded-2xl mb-4">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Sphinx Pose (Salamba Bhujangasana)</h3>
+                <div class="mb-4">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">BENEFITS</span>
+                    <p class="text-sm text-slate-600 mt-1">Strengthens the spine and relieves lower back stiffness from sitting.</p>
+                </div>
+                <div class="care-box bg-red-50 p-3 mb-6">
+                    <span class="text-xs font-bold text-red-600">CARE & PRECAUTION</span>
+                    <p class="text-xs text-red-800">Avoid if you have a recent abdominal surgery or severe back injury.</p>
+                </div>
+                <button @click="showDetection = true; selectedPose = 'Sphinx Pose (Salamba Bhujangasana)'" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-emerald-600 transition flex items-center justify-center">
+                    <i class="fas fa-camera mr-2"></i> Start Detection
+                </button>
+            </div>
+             <!-- (Repeat for 11 more: Chair Pose, Legs-up-wall, Reclined Twist, etc.) -->
+             
+        </div>
+
+    </main>
+
+    <!-- Detection Modal -->
+    <div x-show="showDetection" x-transition:enter="transition ease-out duration-300" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="w-full h-full flex flex-col">
+            <!-- Top Control Bar with Close and Voice Toggle -->
+            <div class="absolute top-3 right-3 z-50 flex gap-2">
+                <button id="voiceToggleBtn" onclick="window.toggleVoiceAssistant()" class="bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-full transition shadow-md flex items-center justify-center" title="Toggle Voice Assistant">
+                    <i class="fas fa-microphone text-lg"></i>
+                </button>
+                <button @click="showDetection = false; window.stopPoseDetection()" class="bg-slate-800/80 text-white hover:bg-red-600 p-2 rounded-full transition shadow-md">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Split Layout: Left = Reference Pose, Right = Live Detection -->
+            <div class="flex-1 grid grid-cols-2 gap-0 h-full w-full">
+                <!-- Reference Pose Panel (LEFT) -->
+                <div class="bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col h-full border-r-2 border-slate-200">
+                    <div class="px-8 py-6 bg-white border-b-2 border-slate-200">
+                        <p class="text-xs uppercase font-semibold text-slate-500 mb-1">Reference Pose</p>
+                        <p class="text-2xl font-bold text-slate-800" x-text="selectedPose"></p>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center p-12">
+                        <img id="referenceImage" src="" class="w-full h-full object-contain" style="max-height: 85vh;">
+                    </div>
+                </div>
+
+                <!-- Live Detection Panel (RIGHT) -->
+                <div class="bg-white flex flex-col items-center justify-center relative h-full">
+                    <div class="flex-1 w-full flex items-center justify-center">
+                        <img id="videoFeed" src="" class="w-full h-full object-cover">
+                        <div id="loadingSpinner" class="absolute inset-0 flex items-center justify-center bg-white">
+                            <div class="text-center">
+                                <i class="fas fa-spinner fa-spin text-emerald-600 text-5xl mb-4"></i>
+                                <p class="text-slate-800 text-2xl font-semibold">Initializing Camera...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Control Bar -->
+                    <div class="w-full bg-white border-t-2 border-slate-200 p-6 flex gap-4 justify-center">
+                        <button @click="showDetection = false; window.stopPoseDetection()" class="px-8 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition shadow-lg">
+                            <i class="fas fa-times mr-2"></i> Stop Detection
+                        </button>
+                        <button class="px-8 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition shadow-lg" id="captureBtn">
+                            <i class="fas fa-camera mr-2"></i> Capture Frame
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Detection -->
+    <script>
+            // Map UI labels to backend pose slugs
+            const poseSlugMap = {
+                'Tree Pose (Vrikshasana)': 'tree',
+                'Butterfly Pose (Baddha Konasana)': 'butterfly',
+                'Cobra Pose (Bhujangasana)': 'cobra',
+                'Downward-Facing Dog (Adho Mukha Svanasana)': 'downdog',
+                "Child's Pose (Balasana)": 'child',
+                'Cat-Cow Pose (Marjaryasana-Bitilasana)': 'catcow',
+                'Adho Mukha Svanasana': 'downdog'
+            };
+
+            const poseImageMap = {
+                tree: '/static/uploads/tree-pose.webp',
+                butterfly: '/static/uploads/butterfly-pose.webp',
+                cobra: '/static/uploads/cobra-pose.jpg',
+                downdog: '/static/uploads/downward-dog.jpg',
+                child: '/static/uploads/child-pose.jpg',
+                catcow: '/static/uploads/cat-cow-pose.webp'
+            };
+
+            let feedbackTimer = null;
+            let sessionStartTime = null;
+            let currentPose = null;
+            let sessionScores = [];
+            let lastVoiceInstruction = '';
+            let voiceEnabled = true;
+
+        // Initialize Web Speech API
+        const synth = window.speechSynthesis;
+        const utteranceQueue = [];
+
+        function speakInstruction(text) {
+            if (!voiceEnabled || !text || text.length === 0) return;
+            
+            // Cancel any ongoing speech
+            synth.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            utterance.lang = 'en-US';
+            
+            synth.speak(utterance);
+        }
+
+        async function pollFeedback() {
+            try {
+                const res = await fetch('/api/live_pose_feedback');
+                const json = await res.json();
+                if (json.status === 'ok' && json.data) {
+                    sessionScores.push(json.data.score || 0);
+                    
+                    // Play voice instruction if it changed
+                    const voiceInstruction = json.data.voice_instruction || '';
+                    if (voiceInstruction && voiceInstruction !== lastVoiceInstruction) {
+                        lastVoiceInstruction = voiceInstruction;
+                        speakInstruction(voiceInstruction);
+                    }
+                }
+            } catch (err) {
+                console.error('Feedback error', err);
+            }
+        }
+
+        async function saveSessionProgress() {
+            if (!currentPose || !sessionStartTime || sessionScores.length === 0) return;
+            
+            const duration = Math.floor((Date.now() - sessionStartTime) / 1000);
+            const avgScore = sessionScores.reduce((a, b) => a + b, 0) / sessionScores.length;
+            
+            try {
+                await fetch('/api/save_progress', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        pose: currentPose,
+                        score: avgScore,
+                        duration: duration
+                    })
+                });
+                console.log('Session saved successfully');
+            } catch (err) {
+                console.error('Error saving session:', err);
+            }
+        }
+
+        window.startPoseDetection = function(label) {
+            const slug = poseSlugMap[label] || 'tree';
+            currentPose = slug;
+            sessionStartTime = Date.now();
+            sessionScores = [];
+            lastVoiceInstruction = '';
+            
+            // Reset voice state
+            synth.cancel();
+            
+            const videoFeed = document.getElementById('videoFeed');
+            const loader = document.getElementById('loadingSpinner');
+            const refImg = document.getElementById('referenceImage');
+            if (loader) loader.style.display = 'flex';
+            videoFeed.onload = function() {
+                if (loader) loader.style.display = 'none';
+                // Welcome message
+                if (voiceEnabled) {
+                    speakInstruction(`Starting ${label.split('(')[0].trim()}. Get ready!`);
+                }
+            };
+            videoFeed.src = `/video_feed?pose_slug=${encodeURIComponent(slug)}&t=${Date.now()}`;
+            if (refImg) refImg.src = poseImageMap[slug] || '/static/uploads/tree-pose.webp';
+            if (feedbackTimer) clearInterval(feedbackTimer);
+            feedbackTimer = setInterval(pollFeedback, 1200);
+        };
+
+        window.stopPoseDetection = function() {
+            const videoFeed = document.getElementById('videoFeed');
+            videoFeed.src = '';
+            if (feedbackTimer) clearInterval(feedbackTimer);
+            feedbackTimer = null;
+            
+            // Cancel any ongoing speech
+            synth.cancel();
+            
+            // Save session progress before stopping
+            saveSessionProgress();
+            
+            // Reset session data
+            currentPose = null;
+            sessionStartTime = null;
+            sessionScores = [];
+            lastVoiceInstruction = '';
+        };
+
+        window.toggleVoiceAssistant = function() {
+            voiceEnabled = !voiceEnabled;
+            const btn = document.getElementById('voiceToggleBtn');
+            if (voiceEnabled) {
+                btn.classList.remove('opacity-50', 'bg-slate-500');
+                btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+                btn.innerHTML = '<i class="fas fa-microphone text-lg"></i>';
+                speakInstruction('Voice assistant enabled');
+            } else {
+                btn.classList.add('opacity-50', 'bg-slate-500');
+                btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                btn.innerHTML = '<i class="fas fa-microphone-slash text-lg"></i>';
+                synth.cancel();
+            }
+        };
+
+        // Capture frame placeholder
+        document.addEventListener('DOMContentLoaded', function() {
+            const captureBtn = document.getElementById('captureBtn');
+            if (captureBtn) {
+                captureBtn.addEventListener('click', function() {
+                    alert('Frame captured! (Coming soon)');
+                });
+            }
+        });
+    </script>
+
+
+
+    <footer class="bg-slate-50 py-12 text-center text-slate-400 text-sm border-t">
+        <p>&copy; 2024 ZenScan AI Pose Detection. Your personal digital Yogi.</p>
+    </footer>
+
+</body>
+</html>

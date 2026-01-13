@@ -1,0 +1,9 @@
+{
+  "sample_user": {
+    "name": "John Doe",
+    "age": 30,
+    "experience": "intermediate",
+    "timestamp": "2025-10-05T10:30:00"
+  },
+  "description": "This folder stores user registration data as JSON files. Each user session creates a new timestamped file."
+}
