@@ -3,69 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Yoga Assistant</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-        .nav-menu {
-            background: #0f172a;
-            border-bottom: 1px solid #1f2a44;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-        }
-        .nav-menu .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .nav-links a {
-            color: #9ecbff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-        .nav-links a:hover {
-            background: #1f2a44;
-        }
-        .login-container { max-width: 400px; margin: 3rem auto; background: #0f172a; padding: 2rem; border-radius: 12px; border: 1px solid #1f2a44; }
-        label { display:block; margin:.4rem 0 .2rem; font-weight:600; }
-        input[type="text"], input[type="password"] { width:100%; padding:.6rem .7rem; border-radius:8px; border:1px solid #334155; background:#0b1220; color:#e2e8f0; }
-        .btn { background:#2563eb; color:#fff; padding:.6rem .9rem; border:none; border-radius:8px; cursor:pointer; margin-top:1rem; width:100%; }
-        .register-link { color:#9ecbff; text-decoration:underline; display:block; margin-top:1rem; text-align:center; }
-        .error { color:#f87171; margin-top:.5rem; }
-    </style>
-</head>
-<body>
-    <nav class="nav-menu">
-        <div class="container">
-            <div class="logo">🧘 Yoga Partner</div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/analyze">Analyze Video</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
-            </ul>
-        </div>
-    </nav>
+    <title>Login • Yoga Partner</title>
 
-    <div class="login-container">
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Login CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+
+<body>
+
+<nav class="nav-menu">
+    <div class="container">
+        <div class="logo">🧘 Yoga Partner</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/analyze">Analyze</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="login-page">
+
+    <div class="login-card">
         <h2>Login</h2>
-        <form method="POST" action="/login">
+
+        <form class="login-form" method="POST" action="/login">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
+
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
-            <button class="btn" type="submit">Login</button>
+
+            <button class="login-btn" type="submit">
+                Login
+            </button>
         </form>
-        <a class="register-link" href="/register">Don't have an account? Register</a>
-        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+        <a class="login-link" href="/register">
+            Don’t have an account? Register
+        </a>
+
+        {% if error %}
+            <div class="login-error">{{ error }}</div>
+        {% endif %}
     </div>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 TEAM CODEASTRA</p>
+    </div>
+</footer>
+
 </body>
 </html>

@@ -3,99 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyze Video - Yoga Pose Detection</title>
+    <title>Analyze Video • Yoga Partner</title>
+
+    <!-- Global CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-        .nav-menu {
-            background: #0f172a;
-            border-bottom: 1px solid #1f2a44;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-        }
-        .nav-menu .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .nav-links a {
-            color: #9ecbff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-        .nav-links a:hover {
-            background: #1f2a44;
-        }
-        .analyze-container { max-width: 900px; margin: 2rem auto; }
-        .row { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-        .card { background: #0f172a; padding: 1rem; border-radius: 12px; border: 1px solid #1f2a44; }
-        label { display:block; margin:.4rem 0 .2rem; font-weight:600; }
-        input[type="text"], select { width:100%; padding:.6rem .7rem; border-radius:8px; border:1px solid #334155; background:#0b1220; color:#e2e8f0; }
-        .actions { display:flex; gap:.6rem; margin-top:.8rem; }
-        .btn { background:#2563eb; color:#fff; padding:.6rem .9rem; border:none; border-radius:8px; cursor:pointer; }
-        .btn.secondary { background:#0b1220; border:1px solid #334155; }
-        .result { white-space:pre-wrap; background:#0b1220; border:1px solid #334155; padding:1rem; border-radius:8px; }
-        video { width:100%; border-radius:12px; border:1px solid #334155; background:#000; }
-    </style>
+    <!-- Analyze Page CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/analyze.css') }}">
+
     <script>
-        async function analyzeVideo(e){
+        async function analyzeVideo(e) {
             e.preventDefault();
+
             const url = document.getElementById('videoUrl').value.trim();
             const pose = document.getElementById('targetPose').value;
-            if(!url){ alert('Please paste a video URL'); return; }
-            document.getElementById('result').textContent = 'Analyzing... this may take a bit for longer videos';
-            try{
-                const res = await fetch('/api/analyze_video',{
-                    method:'POST',
-                    headers:{ 'Content-Type':'application/json' },
+
+            if (!url) {
+                alert("Please enter a video URL");
+                return;
+            }
+
+            document.getElementById('result').textContent =
+                "Analyzing video... please wait.";
+
+            try {
+                const res = await fetch('/api/analyze_video', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url, target_pose: pose })
                 });
+
                 const data = await res.json();
-                document.getElementById('result').textContent = JSON.stringify(data,null,2);
-            }catch(err){
-                document.getElementById('result').textContent = 'Error: '+err.message;
+                document.getElementById('result').textContent =
+                    JSON.stringify(data, null, 2);
+
+            } catch (err) {
+                document.getElementById('result').textContent =
+                    "Error: " + err.message;
             }
         }
-        function preview(){
+
+        function previewVideo() {
             const url = document.getElementById('videoUrl').value.trim();
-            const v = document.getElementById('player');
-            if(url) { v.src = url; v.load(); }
+            const video = document.getElementById('videoPlayer');
+            if (url) {
+                video.src = url;
+                video.load();
+            }
         }
     </script>
-    </head>
-<body>
-    <nav class="nav-menu">
-        <div class="container">
-            <div class="logo">🧘 Yoga Partner</div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/analyze">Analyze Video</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/dashboard">Dashboard</a></li>
-            </ul>
-        </div>
-    </nav>
+</head>
 
-    <header>
-        <div class="container">
-            <h1>🎥 Analyze Video</h1>
-            <p class="subtitle">Paste a Kaggle (or any) video URL and check pose correctness</p>
-        </div>
+<body>
+
+<nav class="nav-menu">
+    <div class="container">
+        <div class="logo">🧘 Yoga Partner</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/analyze">Analyze</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/login">Login</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="analyze-page">
+
+    <header class="analyze-header">
+        <h1>Analyze Yoga Video</h1>
+        <p>Upload a video URL and check pose correctness using AI</p>
     </header>
-    <main class="container analyze-container">
-        <section class="card">
-            <form onsubmit="analyzeVideo(event)">
+
+    <section class="analyze-grid">
+
+        <!-- LEFT: FORM -->
+        <div class="analyze-card">
+            <h3>Video Input</h3>
+
+            <form class="analyze-form" onsubmit="analyzeVideo(event)">
                 <label for="videoUrl">Video URL</label>
-                <input type="text" id="videoUrl" placeholder="https://.../your-video.mp4" onblur="preview()" />
+                <input
+                    type="text"
+                    id="videoUrl"
+                    placeholder="https://example.com/video.mp4"
+                    onblur="previewVideo()"
+                >
 
                 <label for="targetPose">Target Pose</label>
                 <select id="targetPose">
@@ -107,25 +99,45 @@
                     <option value="plank">Plank</option>
                 </select>
 
-                <div class="actions">
-                    <button class="btn" type="submit">Analyze</button>
-                    <button class="btn secondary" type="button" onclick="preview()">Preview Video</button>
+                <div class="analyze-actions">
+                    <button type="submit" class="analyze-btn">
+                        Analyze
+                    </button>
+                    <button
+                        type="button"
+                        class="analyze-btn secondary"
+                        onclick="previewVideo()">
+                        Preview
+                    </button>
                 </div>
             </form>
-        </section>
+        </div>
 
-        <section class="card">
+        <!-- RIGHT: VIDEO + RESULT -->
+        <div class="analyze-card">
             <h3>Preview</h3>
-            <video id="player" controls crossorigin="anonymous"></video>
-        </section>
+            <video
+                id="videoPlayer"
+                class="analyze-video"
+                controls
+                crossorigin="anonymous">
+            </video>
 
-        <section class="card">
-            <h3>Results</h3>
-            <pre id="result" class="result">No analysis yet.</pre>
-        </section>
-    </main>
-    <footer>
-        <div class="container"><p>&copy; 2025 TEAM CODEASTRA</p></div>
-    </footer>
+            <h3 style="margin-top:1.2rem;">Results</h3>
+            <pre id="result" class="analyze-result">
+No analysis yet.
+            </pre>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 TEAM CODEASTRA</p>
+    </div>
+</footer>
+
 </body>
 </html>

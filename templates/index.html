@@ -3,127 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoga Pose Detection - TEAM CODEASTRA</title>
+    <title>Yoga Partner • AI Yoga Pose Assistant</title>
+
+    <!-- Global CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-        .nav-menu {
-            background: #0f172a;
-            border-bottom: 1px solid #1f2a44;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-        }
-        .nav-menu .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .nav-links a {
-            color: #9ecbff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-        .nav-links a:hover {
-            background: #1f2a44;
-        }
-    </style>
+    <!-- Home CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
+
 <body>
-    <nav class="nav-menu">
-        <div class="container">
-            <div class="logo">🧘 Yoga Partner</div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/analyze">Analyze Video</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/dashboard">Dashboard</a></li>
-            </ul>
+
+<nav class="nav-menu">
+    <div class="container">
+        <div class="logo">🧘 Yoga Partner</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/analyze">Analyze</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main>
+
+    <!-- HERO -->
+    <section class="home-hero">
+        <h1>AI-Powered Yoga Pose Detection</h1>
+        <p>
+            Analyze your yoga poses using computer vision and get instant
+            feedback on accuracy, alignment, and posture.
+        </p>
+
+        <div class="home-actions">
+            <a href="/analyze" class="home-btn">Analyze Video</a>
+            <a href="/register" class="home-btn secondary">Get Started</a>
         </div>
-    </nav>
+    </section>
 
-    <header>
-        <div class="container">
-            <h1>🧘 Yoga Pose Detection</h1>
-            <p class="subtitle">Real-time pose analysis powered by MediaPipe and OpenCV</p>
-            <p class="team">TEAM CODEASTRA</p>
+    <!-- FEATURES -->
+    <section class="features">
+        <div class="feature-card">
+            <h3>🎥 Video Analysis</h3>
+            <p>Upload a video and let AI evaluate your yoga posture.</p>
         </div>
-    </header>
 
-    <main class="container">
-        <!-- Video Feed Section -->
-        <section class="video-section">
-            <h2>Live Pose Detection</h2>
-            <div class="video-container">
-                <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Video Feed">
-            </div>
-            <div class="controls">
-                <button id="startBtn" onclick="startVideo()">Start Detection</button>
-                <button id="stopBtn" onclick="stopVideo()">Stop Detection</button>
-            </div>
-        </section>
-
-        <!-- User Registration Section -->
-        <section class="user-section">
-            <h2>User Registration</h2>
-            <form id="userForm">
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="age">Age:</label>
-                    <input type="number" id="age" name="age" required>
-                </div>
-                <div class="form-group">
-                    <label for="experience">Experience Level:</label>
-                    <select id="experience" name="experience" required>
-                        <option value="beginner">Beginner</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="advanced">Advanced</option>
-                    </select>
-                </div>
-                <button type="submit">Save User</button>
-            </form>
-            <div id="message"></div>
-        </section>
-
-        <!-- Stats Section -->
-        <section class="stats-section">
-            <h2>System Status</h2>
-            <div id="healthInfo" class="health-info">
-                <p>Loading system information...</p>
-            </div>
-        </section>
-
-        <!-- API Endpoints Info -->
-        <section class="info-section">
-            <h2>Available Endpoints</h2>
-            <ul>
-                <li><strong>GET /</strong> - Main landing page (this page)</li>
-                <li><strong>GET /health</strong> - System health check and library versions</li>
-                <li><strong>GET /capture</strong> - Single frame capture test</li>
-                <li><strong>GET /video_feed</strong> - Live MJPEG video stream with pose detection</li>
-                <li><strong>POST /api/save_user</strong> - Save user data to JSON</li>
-                <li><strong>GET /api/get_users</strong> - Retrieve all saved users</li>
-            </ul>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 TEAM CODEASTRA - Yoga Pose Detection System</p>
+        <div class="feature-card">
+            <h3>📊 Accuracy Feedback</h3>
+            <p>See how close your pose is to the ideal alignment.</p>
         </div>
-    </footer>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+        <div class="feature-card">
+            <h3>📅 Progress Tracking</h3>
+            <p>Track your improvement over time from your dashboard.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 TEAM CODEASTRA</p>
+    </div>
+</footer>
+
 </body>
 </html>

@@ -1,0 +1,88 @@
+/* ================================
+   DASHBOARD PAGE STYLES
+   ================================ */
+
+.dashboard-page {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    padding: 0 1rem;
+}
+
+/* ---------- Header ---------- */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* ---------- Grid ---------- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+/* ---------- Cards ---------- */
+.dashboard-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 14px;
+    padding: 1.4rem;
+}
+
+.dashboard-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* ---------- Table ---------- */
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.8rem;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    border: 1px solid #334155;
+    padding: 0.6rem 0.9rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.dashboard-table th {
+    background: #020617;
+    font-weight: 600;
+}
+
+/* ---------- Lists ---------- */
+.dashboard-list {
+    padding-left: 1.2rem;
+}
+
+.dashboard-list li {
+    margin-bottom: 0.4rem;
+}
+
+/* ---------- Links ---------- */
+.dashboard-link {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+.dashboard-link:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}

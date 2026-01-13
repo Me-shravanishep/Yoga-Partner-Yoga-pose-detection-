@@ -3,90 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Yoga Assistant</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-        .nav-menu {
-            background: #0f172a;
-            border-bottom: 1px solid #1f2a44;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-        }
-        .nav-menu .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .nav-links a {
-            color: #9ecbff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-        .nav-links a:hover {
-            background: #1f2a44;
-        }
-        .dashboard-container { max-width: 900px; margin: 2rem auto; }
-        .card { background: #0f172a; padding: 1.5rem; border-radius: 12px; border: 1px solid #1f2a44; margin-bottom: 1.5rem; }
-        .history-table { width:100%; border-collapse:collapse; margin-top:1rem; }
-        .history-table th, .history-table td { border:1px solid #334155; padding:.5rem 1rem; text-align:center; }
-        .tasks-list { margin:0; padding:0 0 0 1.2rem; }
-        .logout-link { color:#9ecbff; text-decoration:underline; float:right; }
-    </style>
-</head>
-<body>
-    <nav class="nav-menu">
-        <div class="container">
-            <div class="logo">🧘 Yoga Partner</div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/analyze">Analyze Video</a></li>
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </div>
-    </nav>
+    <title>Dashboard • Yoga Partner</title>
 
-    <div class="dashboard-container">
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body>
+
+<nav class="nav-menu">
+    <div class="container">
+        <div class="logo">🧘 Yoga Partner</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/analyze">Analyze</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="dashboard-page">
+
+    <header class="dashboard-header">
         <h2>Welcome, {{ username }}</h2>
-        <div class="card">
+    </header>
+
+    <section class="dashboard-grid">
+
+        <!-- LEFT COLUMN -->
+        <div class="dashboard-card">
             <h3>Exercise History</h3>
+
             {% if history %}
-            <table class="history-table">
-                <tr><th>Date</th><th>Pose</th><th>Accuracy</th></tr>
+            <table class="dashboard-table">
+                <tr>
+                    <th>Date</th>
+                    <th>Pose</th>
+                    <th>Accuracy</th>
+                </tr>
                 {% for entry in history %}
-                <tr><td>{{ entry.date }}</td><td>{{ entry.pose }}</td><td>{{ entry.accuracy }}</td></tr>
+                <tr>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ entry.pose }}</td>
+                    <td>{{ entry.accuracy }}</td>
+                </tr>
                 {% endfor %}
             </table>
             {% else %}
-            <p>No exercise history yet.</p>
+                <p>No exercise history yet.</p>
             {% endif %}
         </div>
-        <div class="card">
-            <h3>Daily Tasks</h3>
-            <ul class="tasks-list">
-                {% for task in tasks %}
-                <li>{{ task }}</li>
-                {% endfor %}
-            </ul>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+
+            <div class="dashboard-card" style="margin-bottom:1.5rem;">
+                <h3>Daily Tasks</h3>
+                <ul class="dashboard-list">
+                    {% for task in tasks %}
+                        <li>{{ task }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Categories</h3>
+                <ul class="dashboard-list">
+                    <li><a class="dashboard-link" href="/category/yoga">Yoga</a></li>
+                    <li><a class="dashboard-link" href="/category/fatburn">Fat-burning</a></li>
+                    <li><a class="dashboard-link" href="/category/kids">Kids</a></li>
+                    <li><a class="dashboard-link" href="/category/elderly">Elderly</a></li>
+                </ul>
+            </div>
+
         </div>
-        <div class="card">
-            <h3>Categories</h3>
-            <ul class="tasks-list">
-                <li><a href="/category/yoga">Yoga</a></li>
-                <li><a href="/category/fatburn">Fat-burning Workouts</a></li>
-                <li><a href="/category/kids">Kids Exercises</a></li>
-                <li><a href="/category/elderly">Elderly Exercises</a></li>
-            </ul>
-        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 TEAM CODEASTRA</p>
     </div>
+</footer>
+
 </body>
 </html>

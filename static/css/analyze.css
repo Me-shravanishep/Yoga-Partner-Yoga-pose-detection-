@@ -1,0 +1,119 @@
+/* ================================
+   ANALYZE PAGE STYLES
+   ================================ */
+
+.analyze-page {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    padding: 0 1rem;
+}
+
+/* ---------- Header ---------- */
+.analyze-header {
+    margin-bottom: 2rem;
+}
+
+.analyze-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.analyze-header p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+/* ---------- Grid Layout ---------- */
+.analyze-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1.5rem;
+}
+
+/* ---------- Cards ---------- */
+.analyze-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 14px;
+    padding: 1.25rem;
+}
+
+.analyze-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* ---------- Form ---------- */
+.analyze-form label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+}
+
+.analyze-form input,
+.analyze-form select {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #020617;
+    color: #e5e7eb;
+    font-size: 0.9rem;
+}
+
+.analyze-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.3rem;
+}
+
+/* ---------- Buttons ---------- */
+.analyze-btn {
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.analyze-btn.secondary {
+    background: transparent;
+    border: 1px solid #334155;
+    color: #e5e7eb;
+}
+
+.analyze-btn:hover {
+    opacity: 0.9;
+}
+
+/* ---------- Video ---------- */
+.analyze-video {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    background: #000;
+}
+
+/* ---------- Results ---------- */
+.analyze-result {
+    margin-top: 0.5rem;
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1rem;
+    min-height: 180px;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    color: #e5e7eb;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+    .analyze-grid {
+        grid-template-columns: 1fr;
+    }
+}
