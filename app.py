@@ -62,6 +62,30 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
+@app.route('/dashboard')
+def dashboard():
+    """Dashboard page for logged in users"""
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+    users = load_users()
+    user = next((u for u in users if u['username'] == username), None)
+    if not user:
+        return redirect(url_for('login'))
+    
+    # Get user history
+    history = user.get('history', [])
+    
+    # Generate daily tasks (sample)
+    tasks = [
+        '5 minutes meditation',
+        '10 minutes yoga poses',
+        'Track your progress',
+        'Stay hydrated'
+    ]
+    
+    return render_template('dashboard.html', username=username, history=history, tasks=tasks)
+
 # Configure upload folder and data folder
 UPLOAD_FOLDER = 'static/uploads'
 DATA_FOLDER = 'data'

@@ -5,8 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yoga Pose Detection - TEAM CODEASTRA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .nav-menu {
+            background: #0f172a;
+            border-bottom: 1px solid #1f2a44;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        .nav-menu .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            color: #9ecbff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover {
+            background: #1f2a44;
+        }
+    </style>
 </head>
 <body>
+    <nav class="nav-menu">
+        <div class="container">
+            <div class="logo">🧘 Yoga Partner</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/analyze">Analyze Video</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <header>
         <div class="container">
             <h1>🧘 Yoga Pose Detection</h1>
@@ -16,7 +59,6 @@
     </header>
 
     <main class="container">
-        <p><a href="/analyze" style="color:#9ecbff;text-decoration:underline;">Analyze a Video URL →</a></p>
         <!-- Video Feed Section -->
         <section class="video-section">
             <h2>Live Pose Detection</h2>

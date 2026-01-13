@@ -6,6 +6,34 @@
     <title>Dashboard - Yoga Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
+        .nav-menu {
+            background: #0f172a;
+            border-bottom: 1px solid #1f2a44;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        .nav-menu .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            color: #9ecbff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover {
+            background: #1f2a44;
+        }
         .dashboard-container { max-width: 900px; margin: 2rem auto; }
         .card { background: #0f172a; padding: 1.5rem; border-radius: 12px; border: 1px solid #1f2a44; margin-bottom: 1.5rem; }
         .history-table { width:100%; border-collapse:collapse; margin-top:1rem; }
@@ -15,8 +43,20 @@
     </style>
 </head>
 <body>
+    <nav class="nav-menu">
+        <div class="container">
+            <div class="logo">🧘 Yoga Partner</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/analyze">Analyze Video</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="dashboard-container">
-        <h2>Welcome, {{ username }} <a class="logout-link" href="/logout">Logout</a></h2>
+        <h2>Welcome, {{ username }}</h2>
         <div class="card">
             <h3>Exercise History</h3>
             {% if history %}
