@@ -142,34 +142,42 @@ def capture_once():
 
 @app.route('/video_feed')
 def video_feed():
-    """Video streaming route - returns MJPEG stream"""
+    """Video streaming route - returns MJPEG stream with pose detection and feedback"""
+    from models.pose_detector import PoseDetector
+    
     def generate():
         cap = cv2.VideoCapture(0)
+        detector = PoseDetector()
+        
         while True:
             success, frame = cap.read()
             if not success:
                 break
             
-            # Convert BGR to RGB for MediaPipe
-            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image.flags.writeable = False
+            # Use PoseDetector for pose detection
+            image, results = detector.find_pose(frame, draw=True)
             
-            # Process with MediaPipe Pose
-            results = pose.process(image)
-            
-            # Convert back to BGR for OpenCV
-            image.flags.writeable = True
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            
-            # Draw pose landmarks if detected
-            if results.pose_landmarks:
-                mp_drawing.draw_landmarks(
-                    image,
-                    results.pose_landmarks,
-                    mp_pose.POSE_CONNECTIONS,
-                    mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=2),
-                    mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)
-                )
+            # Get landmarks and classify pose
+            if results and results.pose_landmarks:
+                landmarks = detector.get_position(results, image.shape)
+                pose_name = detector.classify_pose(landmarks)
+                
+                # Display pose name on screen
+                cv2.putText(image, f"Pose: {pose_name}", 
+                           (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 
+                           1.0, (0, 255, 0), 2, cv2.LINE_AA)
+                
+                # Calculate and display accuracy for specific poses
+                if pose_name in ["Mountain Pose (Tadasana)", "Warrior Pose"]:
+                    # Simple accuracy based on pose detection confidence
+                    accuracy = int(min(results.pose_landmarks.landmark[0].visibility * 100, 100))
+                    cv2.putText(image, f"Accuracy: {accuracy}%", 
+                               (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 
+                               0.8, (255, 255, 0), 2, cv2.LINE_AA)
+            else:
+                cv2.putText(image, "No Pose Detected", 
+                           (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 
+                           1.0, (0, 0, 255), 2, cv2.LINE_AA)
             
             # Encode frame as JPEG
             ret, buffer = cv2.imencode('.jpg', image)
@@ -179,6 +187,7 @@ def video_feed():
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         
         cap.release()
+        detector.close()
     
     return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 

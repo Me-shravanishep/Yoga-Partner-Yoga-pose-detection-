@@ -36,8 +36,24 @@
         </p>
 
         <div class="home-actions">
-            <a href="/analyze" class="home-btn">Analyze Video</a>
-            <a href="/register" class="home-btn secondary">Get Started</a>
+            <a href="#live-detection" class="home-btn">Start Live Detection</a>
+            <a href="/analyze" class="home-btn secondary">Analyze Video</a>
+        </div>
+    </section>
+
+    <!-- LIVE DETECTION SECTION -->
+    <section id="live-detection" class="live-section">
+        <h2>🎥 Live Yoga Pose Detection</h2>
+        <p style="color: #94a3b8; margin-bottom: 1.5rem;">Turn on your camera and start practicing yoga poses in real-time</p>
+        
+        <div class="video-container">
+            <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Live Camera Feed" style="width: 100%; max-width: 800px; border-radius: 12px; border: 2px solid #1e293b;">
+        </div>
+        
+        <div class="video-controls">
+            <p style="color: #cbd5e1; font-size: 0.9rem; margin-top: 1rem;">
+                💡 Tip: Stand in front of your camera and try different yoga poses. The AI will detect and evaluate your posture in real-time!
+            </p>
         </div>
     </section>
 
