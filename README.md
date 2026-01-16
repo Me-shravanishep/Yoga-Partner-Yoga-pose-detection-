@@ -138,3 +138,25 @@ If you'd like, I can now add a live streaming endpoint that sends MJPEG frames a
 Team: CODEASTRA
 # Yoga-Partner-Yoga-pose-detection-
 TEAM CODEASTRA
+
+## 1. Navigate to project
+cd "c:\Users\YUGANTI\OneDrive\Desktop\Documents\GitHub\Yoga-Partner-Yoga-pose-detection-"
+
+# 2. Activate virtual environment
+.\venv\Scripts\Activate.ps1
+
+# 3. Install dependencies (in this order - NOT all at once)
+pip install flask==2.3.0
+pip install numpy==1.26.4
+pip install opencv-contrib-python==4.8.1.78
+pip install mediapipe==0.10.8
+pip install protobuf==3.20.3
+pip install Pillow==10.0.0
+pip install matplotlib==3.7.2
+pip install pyttsx3
+
+# 4. Run the app
+python app.py
+
+# 5. Open browser
+# Go to: http://127.0.0.1:5000
